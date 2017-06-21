@@ -238,7 +238,8 @@ class ContainerApiMixin(object):
                          memswap_limit=None, cpuset=None, host_config=None,
                          mac_address=None, labels=None, volume_driver=None,
                          stop_signal=None, networking_config=None,
-                         healthcheck=None, stop_timeout=None, runtime=None):
+                         healthcheck=None, stop_timeout=None, runtime=None,
+                         cpu_realtime_period=None, cpu_realtime_runtime=None):
         """
         Creates a container. Parameters are similar to those for the ``docker
         run`` command except it doesn't support the attach options (``-a``).
@@ -420,6 +421,8 @@ class ContainerApiMixin(object):
             runtime (str): Runtime to use with this container.
             healthcheck (dict): Specify a test to perform to check that the
                 container is healthy.
+            cpu_realtime_period (int): See kernel cpu.rt_period_us doc
+            cpu_realtime_runtime (int): See kernel cpu.rt_runtime_us doc
 
         Returns:
             A dictionary with an image 'Id' key and a 'Warnings' key.
@@ -1166,7 +1169,8 @@ class ContainerApiMixin(object):
         self, container, blkio_weight=None, cpu_period=None, cpu_quota=None,
         cpu_shares=None, cpuset_cpus=None, cpuset_mems=None, mem_limit=None,
         mem_reservation=None, memswap_limit=None, kernel_memory=None,
-        restart_policy=None
+        restart_policy=None, cpu_realtime_period=None,
+        cpu_realtime_runtime=None
     ):
         """
         Update resource configs of one or more containers.
@@ -1185,6 +1189,8 @@ class ContainerApiMixin(object):
                 disable swap
             kernel_memory (int or str): Kernel memory limit
             restart_policy (dict): Restart policy dictionary
+            cpu_realtime_period (int): See kernel cpu.rt_period_us doc
+            cpu_realtime_runtime (int): See kernel cpu.rt_runtime_us doc
 
         Returns:
             (dict): Dictionary containing a ``Warnings`` key.
@@ -1222,6 +1228,10 @@ class ContainerApiMixin(object):
                     'for API version < 1.23'
                 )
             data['RestartPolicy'] = restart_policy
+        if cpu_realtime_period:
+            data['CpuRealtimePeriod'] = cpu_realtime_period
+        if cpu_realtime_runtime:
+            data['CpuRealtimeRuntime'] = cpu_realtime_runtime
 
         res = self._post_json(url, data=data)
         return self._result(res, True)

@@ -18,6 +18,8 @@ Change log
   the `config.json` data from disk.
 * Added `labels` property to the `Image` and `Container` classes.
 * Added `image` property to the `Container` class.
+* Added support for the following `HostConfig` parameters:
+  `cpu_realtime_period`, `cpu_realtime_runtime`.
 
 ### Bugfixes
 

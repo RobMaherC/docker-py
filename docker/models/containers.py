@@ -878,6 +878,8 @@ RUN_HOST_CONFIG_KWARGS = [
     'privileged',
     'publish_all_ports',
     'read_only',
+    'cpu_realtime_period',
+    'cpu_realtime_runtime',
     'restart_policy',
     'security_opt',
     'shm_size',
